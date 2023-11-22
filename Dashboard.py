@@ -13,12 +13,6 @@
 # pip install seaborn
 
 
-# In[3]:
-
-
-pip install plotly
-
-
 # In[4]:
 
 
