@@ -58,7 +58,7 @@ st.set_page_config(page_title = "Churning customers", page_icon = ":credit_card:
 st.title(":credit_card: Credit Card Churning Customers Analysis")
 st.markdown('<style>div.block-container{padding-top:1rem;}</style>', unsafe_allow_html=True)
 box_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-st.markdown(f"<span style='font-size: 7px;'>Last updated: {box_date}</span>", unsafe_allow_html=True)
+st.markdown(f"<span style='font-size: 10px;'>Last updated: {box_date}</span>", unsafe_allow_html=True)
 
 
 # In[11]:
