@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[54]:
 
 
 import pandas as pd
@@ -19,48 +19,49 @@ import plotly.graph_objects as go
 from bokeh.palettes import Spectral10
 import datetime
 from bokeh.transform import jitter
-
-
-# In[2]:
-
-
-df = pd.read_csv("churn.csv", encoding = "ISO-8859-1")
-
-
-# In[3]:
-
-
-df.head()
-
-
-# In[4]:
-
-
-df.describe()
+from datetime import datetime
 
 
 # In[5]:
 
 
-df.info()
+df = pd.read_csv("churn.csv", encoding = "ISO-8859-1")
 
 
 # In[6]:
 
 
-st.set_page_config(page_title = "Churning customers", page_icon = ":credit_card:", layout = "wide")
+df.head()
 
 
 # In[7]:
 
 
-st.title(":credit_card: Credit Card Churning Customers Analysis")
-st.markdown('<style>div.block-container{padding-top:1rem;}</style>', unsafe_allow_html=True)
-box_date = str(datetime.datetime.now().strftime("%d %B %Y"))
-st.write(f"Last updated by:  \n {box_date}")
+df.describe()
 
 
 # In[8]:
+
+
+df.info()
+
+
+# In[9]:
+
+
+st.set_page_config(page_title = "Churning customers", page_icon = ":credit_card:", layout = "wide")
+
+
+# In[55]:
+
+
+st.title(":credit_card: Credit Card Churning Customers Analysis")
+st.markdown('<style>div.block-container{padding-top:1rem;}</style>', unsafe_allow_html=True)
+box_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+st.markdown(f"<span style='font-size: 7px;'>Last updated: {box_date}</span>", unsafe_allow_html=True)
+
+
+# In[11]:
 
 
 fl = st.file_uploader(":file_folder: Upload a file", type=(["csv", "txt", "xlsx", "xls"]))
@@ -72,20 +73,20 @@ else:
     df = pd.read_csv("churn.csv", encoding = "ISO-8859-1")
 
 
-# In[9]:
+# In[12]:
 
 
 st.divider()
 
 
-# In[10]:
+# In[13]:
 
 
 # Create columns with a custom layout, including 'spacer' columns
 col2, spacer, col3 = st.columns([3, 1.05, 3])
 
 
-# In[11]:
+# In[14]:
 
 
 # Title for the sidebar
@@ -152,7 +153,7 @@ with col2:
         st.write("Please select a column for plotting.")
 
 
-# In[12]:
+# In[15]:
 
 
 # Convert 'ExistingLost' to a numeric value: for example, 'Existing Customer' to 1, and 'Lost' to 0
@@ -201,13 +202,13 @@ with col3:
     st.plotly_chart(fig)
 
 
-# In[13]:
+# In[16]:
 
 
 st.divider()
 
 
-# In[14]:
+# In[17]:
 
 
 # Convert 'MonthsInactive' to string if treating as categorical
@@ -247,7 +248,7 @@ with col2:
     st.plotly_chart(fig)
 
 
-# In[15]:
+# In[18]:
 
 
 # Define categories and corresponding colors
@@ -285,13 +286,13 @@ with col3:
     st.plotly_chart(fig)
 
 
-# In[16]:
+# In[19]:
 
 
 newdf = df.copy()
 
 
-# In[17]:
+# In[20]:
 
 
 le = LabelEncoder()
@@ -300,7 +301,7 @@ for col in newdf[categorical]:
     newdf[col]=le.fit_transform(newdf[col])
 
 
-# In[18]:
+# In[21]:
 
 
 #Create a StandardScaler object  
@@ -314,7 +315,7 @@ cols_to_norm = ['Age', 'Dependent', 'PeriodOfRelationship', 'TotalNumberProducts
 newdf[cols_to_norm] = scaler.fit_transform(newdf[cols_to_norm])
 
 
-# In[19]:
+# In[22]:
 
 
 from sklearn.ensemble import RandomForestClassifier
@@ -333,28 +334,28 @@ y = newdf['ExistingLost'].values
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.20, random_state = 38) # 80% training and 20% test
 
 
-# In[20]:
+# In[23]:
 
 
 # fit
 rfc.fit(X_train,y_train)
 
 
-# In[21]:
+# In[24]:
 
 
 # Making predictions
 predictions = rfc.predict(X_test)
 
 
-# In[22]:
+# In[25]:
 
 
 # Let's check the report of our default model
 print(classification_report(y_test,predictions))
 
 
-# In[23]:
+# In[26]:
 
 
 # Calculate cm by calling a method named as 'confusion_matrix'
@@ -382,13 +383,13 @@ print("Classification Report:")
 print(classification_report(y_test, predictions))
 
 
-# In[24]:
+# In[27]:
 
 
 print(accuracy_score(y_test,predictions))
 
 
-# In[25]:
+# In[28]:
 
 
 #Grid sear and Kfold
@@ -410,7 +411,7 @@ rf = GridSearchCV(rf, parameters,
 rf.fit(X_train, y_train)
 
 
-# In[26]:
+# In[29]:
 
 
 # scores of GridSearch CV
@@ -418,7 +419,7 @@ scores = rf.cv_results_
 pd.DataFrame(scores).head()
 
 
-# In[27]:
+# In[30]:
 
 
 # Replace the following line with your actual scores data
@@ -439,7 +440,7 @@ plt.legend()
 plt.show()
 
 
-# In[28]:
+# In[31]:
 
 
 # Create the parameter grid based on the results of random search 
@@ -457,21 +458,21 @@ grid_search = GridSearchCV(estimator = rf, param_grid = param_grid,
                           cv = 3, n_jobs = -1,verbose = 1)
 
 
-# In[29]:
+# In[32]:
 
 
 # Fit the grid search to the data
 grid_search.fit(X_train, y_train)
 
 
-# In[30]:
+# In[33]:
 
 
 # printing the optimal accuracy score and hyperparameters
 print('We can get accuracy of',grid_search.best_score_,'using',grid_search.best_params_)
 
 
-# In[31]:
+# In[34]:
 
 
 # model with the best hyperparameters
@@ -484,27 +485,27 @@ rfc = RandomForestClassifier(bootstrap=True,
                              n_estimators=100)
 
 
-# In[32]:
+# In[35]:
 
 
 # fit
 rfc.fit(X_train,y_train)
 
 
-# In[33]:
+# In[36]:
 
 
 # predict
 predictions = rfc.predict(X_test)
 
 
-# In[34]:
+# In[37]:
 
 
 print(classification_report(y_test,predictions))
 
 
-# In[35]:
+# In[38]:
 
 
 # Calculate cm by calling a method named as 'confusion_matrix'
@@ -547,13 +548,13 @@ with col2:
     st.pyplot(fig)
 
 
-# In[36]:
+# In[39]:
 
 
 print(accuracy_score(y_test,predictions))
 
 
-# In[37]:
+# In[43]:
 
 
 with col3:
@@ -571,7 +572,7 @@ with col3:
     """, unsafe_allow_html=True)
 
 
-# In[38]:
+# In[ ]:
 
 
 csv = df.to_csv(index=False).encode('utf-8')
