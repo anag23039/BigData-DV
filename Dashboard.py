@@ -27,6 +27,23 @@ from datetime import datetime
 
 df = pd.read_csv("churn.csv", encoding = "ISO-8859-1")
 
+# Define configuration settings
+config = {
+    "theme": {
+        "base": "light",
+        "primaryColor": "#5E18EB",
+        "backgroundColor": "#FFFFFF",
+        "secondaryBackgroundColor": "#F0F2F6"
+    }
+}
+
+# Example usage
+base_theme = config["theme"]["base"]
+primary_color = config["theme"]["primaryColor"]
+background_color = config["theme"]["backgroundColor"]
+secondary_background_color = config["theme"]["secondaryBackgroundColor"]
+
+# You can then use these variables in your code as needed
 
 # In[6]:
 
